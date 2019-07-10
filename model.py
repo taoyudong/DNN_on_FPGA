@@ -43,13 +43,13 @@ def LeNet(x):
     fc1    = tf.nn.relu(fc1)
 
     #Input = 120. Output = 84.
-    fc2_W  = init_weight((120,84))
-    fc2_b  = init_bias(84)
+    fc2_W  = init_weight((120,64))
+    fc2_b  = init_bias(64)
     fc2    = tf.matmul(fc1, fc2_W) + fc2_b
     fc2 = tf.nn.relu(fc2)
 
     #Input = 84. Output = 10.
-    fc3_W  = init_weight((84,10))
+    fc3_W  = init_weight((64,10))
     fc3_b  = init_bias(10)
     logits = tf.matmul(fc2, fc3_W) + fc3_b
     
