@@ -34,23 +34,17 @@ def LeNet(x):
     #Input = 10x10x16. Output = 5x5x16.
     conv2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID')
     #Input = 5x5x16. Output = 400.
-    fc0   = flatten(conv2)
-    
-    #Input = 400. Output = 120.
-    fc1_W = init_weight((400,120))
-    fc1_b = init_bias(120)
-    fc1   = tf.matmul(fc0, fc1_W) + fc1_b
-    fc1    = tf.nn.relu(fc1)
 
-    #Input = 120. Output = 84.
-    fc2_W  = init_weight((120,64))
-    fc2_b  = init_bias(64)
-    fc2    = tf.matmul(fc1, fc2_W) + fc2_b
-    fc2 = tf.nn.relu(fc2)
+    conv3_W = init_weight((5, 5, 16, 64))
+    conv3_b = init_bias(64)
+    conv3 = tf.nn.conv2d(conv2, conv3_W, strides=[1, 5, 5, 1], padding='VALID') + conv3_b
+    conv3 = tf.nn.relu(conv3)
+    fc0   = flatten(conv3)
+
 
     #Input = 84. Output = 10.
     fc3_W  = init_weight((64,10))
     fc3_b  = init_bias(10)
-    logits = tf.matmul(fc2, fc3_W) + fc3_b
+    logits = tf.matmul(fc0, fc3_W) + fc3_b
     
-    return logits, fc2
+    return logits, fc0
