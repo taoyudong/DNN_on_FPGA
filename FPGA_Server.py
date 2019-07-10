@@ -1,18 +1,20 @@
 # This code should be run in advance of GPU_server.py
 import socket
+import serial
 
 
 HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
-PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
+PORT = 22        # Port to listen on (non-privileged ports are > 1023)
 
 RECV_BUFFER_SIZE = 1024
 
 
 def fc_on_fpga(data):
     # This function should send data to FPGA and return the received results
-    rsts = [0.] * 10
-
-    return ','.join(map(str, rsts))
+    ser = serial.Serial('/dev/ttyUSB1/', 19200)
+    ser.write(data)
+    s = ser.read(10)
+    return str(s.hex())
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
